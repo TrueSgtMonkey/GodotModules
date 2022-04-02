@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<class name="AnimationIso" category="Modules">
+    <brief_description>
+        Plays an animation a single frame at a time and keeps track of the frame.
+    </brief_description>
+    <description>
+        Plays an animation a single frame at a time and keeps track of the frame. Keeps track of isometric animations with the isoAnimation() function. Should be used with a timer to play the animation on an interval, and should be used in the _process(delta) function.
+    </description>
+    <methods>
+        <method name="animation">
+			<argument index="0" name="stFrame" type="int">
+            </argument>
+			<argument index="1" name="maxFrame" type="int">
+            </argument>
+            <description>
+				A straightforward animation function that plays an animation one frame at a time. When the frame number reaches the max frame, it resets to the starting frame. The starting frame is the first frame of the specific part of the sprite sheet or animation you want to play. The max frame is the last frame of the specific sprite sheet or animation you want to play. Must be within the bounds of the sprite. If the start frame you pass in is greater than the max frame, then the animation will play backwards instead of forwards.
+            </description>
+        </method>
+        <method name="isoAnimation">
+            <argument index="0" name="hframes" type="int">
+            </argument>
+			<argument index="1" name="frame" type="int">
+            </argument>
+			<argument index="2" name="stFrame" type="int">
+            </argument>
+			<argument index="3" name="offset" type="int">
+            </argument>
+            <description>
+				Plays an animation from 8 different directions and keeps track of the frame across those directions. hframes need to be the hframes of your Sprite or else the function will not animate correctly. The frame is the direction that the creature is facing. 0 is the starting direction frame, and 7 is the final frame. 0 == 0 degrees (0 radians) or 360 degrees (2 * pi radians) while 7 == 315 degrees (7 * pi / 4). The offset is the frame that each direction will start from, meaning that the offset will skip certain frames on each direction. Offset must be positive.
+            </description>
+        </method>
+		<method name="getFrameNumber">
+            <description>
+				Returns the current frame number. Useful for checking if the animation is complete. TIP: When the animation you are playing reaches its start frame after playing through each frame of the animation, this is when you want to stop it:
+					if(ani_iso_variable.getFrameNumber() == 0):
+						# stop your animation
+            </description>
+        </method>
+		<method name="setFrameNumber">
+            <argument index="0" name="num" type="int">
+            </argument>
+            <description>
+				Sets the current frame number to a specified value. Use when you are about to play a different animation from the same sprite sheet.
+            </description>
+        </method>
+    </methods>
+    <members>
+        <member name="frameNum" type="int" setter="setFrameNumber" getter="getFrameNumber" brief="">
+        </member>
+    </members>
+    <constants>
+    </constants>
+</class>
