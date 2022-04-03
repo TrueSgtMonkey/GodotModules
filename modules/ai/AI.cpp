@@ -20,32 +20,42 @@ AI::AI()
 	scentGroup = "Scent";
 }
 
-bool AI::checkForPlayer(Object* p_sprite, const Dictionary& result, int curr_frame)
+bool AI::checkForPlayer(Object* p_sprite, const Dictionary& result, Object* p_dir_timer, Object* p_ani_timer)
 {
-	Sprite3D* sprite = Object::cast_to<Sprite3D>(p_sprite);
-	int framer = Math::rand() % 8;
-	Vector3 turnMove = rotater.idleTurn(sprite, framer, row, curr_frame);
-	if (Math::abs(turnMove.x) > 0.0 || Math::abs(turnMove.z) > 0.0)
+	AniTimer* dirtimer = Object::cast_to<AniTimer>(p_dir_timer);
+	if(dirtimer != NULL && dirtimer->getFrameReady())
 	{
-		oldVelocity.x = turnMove.x;
-		oldVelocity.y = turnMove.y;
-		oldVelocity.z = turnMove.z;
-	}
-	idleMove(turnMove);
-	//if startIdle starts off as true, then enemy will not check for the player
-	if (!startIdle && result.size() > 0)
-	{
-		Spatial* spatial = Object::cast_to<Spatial>(result["collider"]);
-		if (spatial != NULL && spatial->is_in_group(playerGroup))
+		AniTimer* anitimer = Object::cast_to<AniTimer>(p_ani_timer);
+		if(anitimer != NULL)
 		{
-			Vector3 AP = spatial->get_global_transform().origin - get_global_transform().origin;
-			if (playerInRange(AP))
+			dirtimer->stTime();
+			int framer = Math::rand() % 8;
+			Vector3 turnMove = rotater.idleTurn(p_sprite, framer, row, anitimer->getFrameNumber());
+			if (Math::abs(turnMove.x) > 0.0 || Math::abs(turnMove.z) > 0.0)
 			{
-				float dotAP = playerDot(AP);
-				return dotAP > 0;
+				oldVelocity.x = turnMove.x;
+				oldVelocity.y = turnMove.y;
+				oldVelocity.z = turnMove.z;
+			}
+			idleMove(turnMove);
+			//if startIdle starts off as true, then enemy will not check for the player
+			if (!startIdle && result.size() > 0)
+			{
+				Spatial* spatial = Object::cast_to<Spatial>(result["collider"]);
+				if (spatial != NULL && spatial->is_in_group(playerGroup))
+				{
+					Vector3 AP = spatial->get_global_transform().origin - get_global_transform().origin;
+					if (playerInRange(AP))
+					{
+						float dotAP = playerDot(AP);
+						return dotAP > 0;
+					}
+				}
 			}
 		}
+		
 	}
+	
 	return false;
 }
 
@@ -208,8 +218,8 @@ void AI::_notification(int p_what)
 
 void AI::_bind_methods()
 {
-    
-	ClassDB::bind_method(D_METHOD("checkForPlayer", "sprite", "result", "curr_frame"), &AI::checkForPlayer);
+    //AI METHODS
+	ClassDB::bind_method(D_METHOD("checkForPlayer", "sprite", "result", "direction_timer", "animation_timer"), &AI::checkForPlayer);
 	ClassDB::bind_method(D_METHOD("followScentTrail", "vec3s"), &AI::followScentTrail);
     ClassDB::bind_method(D_METHOD("rayShot", "vec1", "vec2", "vecExclude"), &AI::rayShot, DEFVAL(Array()));
     ClassDB::bind_method(D_METHOD("setHorizontalVelocity", "vel"), &AI::setHorizontalVelocity);
@@ -232,15 +242,15 @@ void AI::_bind_methods()
 	ClassDB::bind_method(D_METHOD("getPlayerGroup"), &AI::getPlayerGroup);
     ClassDB::bind_method(D_METHOD("setScentGroup", "group"), &AI::setScentGroup);
 	ClassDB::bind_method(D_METHOD("getScentGroup"), &AI::getScentGroup);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "row", PROPERTY_HINT_RANGE, "1,16384,1"), "setRow", "getRow");
-	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "velocity", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setVelocity", "getVelocity");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "rd", PROPERTY_HINT_RANGE, "2,16384,2"), "setRandDistribution", "getRandDistribution");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "rc", PROPERTY_HINT_RANGE, "1,16384,1"), "setRandChance", "getRandChance");
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "sightDist", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setSightDist", "getSightDist");
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "walking", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setWalking", "getWalking");
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "startIdle", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setStartIdle", "getStartIdle");
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "playerGroup", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setPlayerGroup", "getPlayerGroup");
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "scentGroup", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setScentGroup", "getScentGroup");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "row"), "setRow", "getRow");
+	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "velocity"), "setVelocity", "getVelocity");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "rd"), "setRandDistribution", "getRandDistribution");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "rc"), "setRandChance", "getRandChance");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "sightDist"), "setSightDist", "getSightDist");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "walking"), "setWalking", "getWalking");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "startIdle"), "setStartIdle", "getStartIdle");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "playerGroup"), "setPlayerGroup", "getPlayerGroup");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "scentGroup"), "setScentGroup", "getScentGroup");
 }
 
 void AI::idleMove(const Vector3& turnMove)

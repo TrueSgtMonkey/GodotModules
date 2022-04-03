@@ -6,6 +6,7 @@
 #include "scene/resources/world.h"
 #include "scene/3d/sprite_3d.h"
 #include "modules/spriteRotater/sprite_rotater.h"
+#include "modules/anitimer/AniTimer.h"
 
 class AI : public KinematicBody
 {
@@ -35,7 +36,7 @@ class AI : public KinematicBody
 		
 	public:
 		AI();
-		bool checkForPlayer(Object* p_sprite, const Dictionary& result, int curr_frame);
+		bool checkForPlayer(Object* p_sprite, const Dictionary& result, Object* p_dir_timer, Object* p_ani_timer);
 		Dictionary rayShot(const Vector3& vec1, const Vector3& vec2, const Vector<RID>& vecExclude = Vector<RID>());
 		void setHorizontalVelocity(const Vector3& vel);
     Dictionary followScentTrail(const Array& vec3s);
