@@ -23,7 +23,7 @@ Below are explanations for the different .txt files:
 
 "compile.txt"
 * The first option is compile only.
-* It does not actually build anything I believe, but is more of a test to see if you are able to compile.
+ * It does not actually build anything I believe, but is more of a test to see if you are able to compile.
 * target compilations build is the one you want to use.
 * The section with the various number of commands makes a .app bundle on mac OS.
 * The final line signs the .app
