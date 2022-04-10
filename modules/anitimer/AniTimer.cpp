@@ -26,14 +26,23 @@ void AniTimer::animation(Object* p_sprite, int stFrame, int maxFrame)
 		else if (stFrame > maxFrame)
 		{
 			frameNum -= 1;
-			if (frameNum <= maxFrame && frameNum >= 0)
+			//cannot be negative even if maxFrame < 0
+			if (frameNum <= maxFrame || frameNum < 0)
 				frameNum = stFrame;
 		}
 
+		int totalFrames = sprite->get_hframes() * sprite->get_vframes();
+		frameNum = min(totalFrames, frameNum);
 		sprite->set_frame(frameNum);
 	}
 }
 
+/* 
+p_sprite is the sprite passed in that we are going to animate
+angle is the current angle that the sprite is facing
+	* 0 = east, 2 = north, 4 = west, 6 = south
+stAngle offsets our angle by a certain amount to play different animations
+*/
 void AniTimer::isoAnimation(Object* p_sprite, int angle, int stAngle)
 {
 	Sprite3D* sprite = Object::cast_to<Sprite3D>(p_sprite);
@@ -43,9 +52,17 @@ void AniTimer::isoAnimation(Object* p_sprite, int angle, int stAngle)
 		{
 			return;
 		}
+		
+		//getting the current frame regardless of angle
 		int hframes = sprite->get_hframes();
 		int currFrame = frameNum % hframes;
+
+		//shifting the angle in case we want to play a different animation
 		int currAngle = stAngle + angle;
+
+		/* making sure the frame is at the same spot of the animation, the 
+		   same angle, and on the right animation before calling the animation 
+		   function to play across that current angle */
 		frameNum = currFrame + (angle * hframes);
 		frameNum += stAngle * hframes;
 		animation(sprite, currAngle * hframes, (currAngle + 1) * hframes - 1);
@@ -127,4 +144,19 @@ void AniTimer::_bind_methods()
 	ClassDB::bind_method(D_METHOD("getFrameNumber"), &AniTimer::getFrameNumber);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "frameReady", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameReady", "getFrameReady");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "frameNum", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameNumber", "getFrameNumber");
+}
+
+/* PRIVATE METHODS */
+int AniTimer::max(int x, int y)
+{
+	if(x < y)
+		return y;
+	return x;
+}
+
+int AniTimer::min(int x, int y)
+{
+	if(x < y)
+		return x;
+	return y;
 }

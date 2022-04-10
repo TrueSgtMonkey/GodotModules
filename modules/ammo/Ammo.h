@@ -1,6 +1,7 @@
 #ifndef AMMO_CLASS_H
 #define AMMO_CLASS_H
 
+#include <stdio.h>
 #include "core/reference.h"
 
 class Ammo : public Reference

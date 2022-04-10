@@ -14,7 +14,8 @@ class AniTimer : public Timer
 	int lastFrame;
 
 	//private functions
-    
+    int max(int x, int y);
+	int min(int x, int y);
 	
 	protected:
 		static void _bind_methods();
