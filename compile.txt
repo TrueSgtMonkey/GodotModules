@@ -1,0 +1,18 @@
+# basic compilation from the website
+scons platform=osx arch=arm64 --jobs=$(sysctl -n hw.logicalcpu)
+
+# target compilations
+scons platform=osx arch=arm64 --jobs=$(sysctl -n hw.logicalcpu) target=release_debug
+
+# make a .app bundle like in official builds
+# the last line signs the app
+cp -r misc/dist/osx_tools.app ./Godot.app
+mkdir -p Godot.app/Contents/MacOS
+cp bin/godot.osx.opt.tools.arm64 Godot.app/Contents/MacOS/Godot
+chmod +x Godot.app/Contents/MacOS/Godot
+xattr -rds com.apple.quarantine Godot.app/Contents/MacOS/Godot
+sudo xattr -rds com.apple.quarantine Godot.app
+
+#RELEASE BUILDS - TAKES A WHILE
+scons platform=osx tools=no target=release arch=arm64 --jobs=$(sysctl -n hw.logicalcpu)
+scons platform=osx tools=no target=release_debug arch=arm64 --jobs=$(sysctl -n hw.logicalcpu)
