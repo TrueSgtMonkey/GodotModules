@@ -8,7 +8,7 @@ Also contained are the compile commands for both Windows and Mac contained in di
 * Any of the ones under RELEASE BUILDS are for exporting the Godot project.
 
 Below are explanations for the different .txt files:
-"commands to build.txt"
+# "commands to build.txt"
 * The use_lto=yes option I think improves performance, but it also takes MUCH longer to build.
   * Even after everything is compiled, this has to do even more.
 * The one without is really good if you want to keep making changes to the project.
@@ -18,10 +18,10 @@ Below are explanations for the different .txt files:
 * The release builds are only for exporting the godot project for release.
   * They all take a while and are not used for running the actual project (Hence, the tools=no line).
 
-"commands to build - Copy.txt"
+# "commands to build - Copy.txt"
 * I don't know why this is still here but keeping just in case and out of laziness.
 
-"compile.txt"
+# "compile.txt"
 * The first option is compile only.
  * It does not actually build anything I believe, but is more of a test to see if you are able to compile.
 * target compilations build is the one you want to use.
