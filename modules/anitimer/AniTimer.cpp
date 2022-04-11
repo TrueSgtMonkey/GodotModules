@@ -30,9 +30,8 @@ void AniTimer::animation(Object* p_sprite, int stFrame, int maxFrame)
 			if (frameNum <= maxFrame || frameNum < 0)
 				frameNum = stFrame;
 		}
-
-		int totalFrames = sprite->get_hframes() * sprite->get_vframes();
-		frameNum = min(totalFrames, frameNum);
+		
+		frameNum = min(sprite->get_hframes() * sprite->get_vframes(), frameNum);
 		sprite->set_frame(frameNum);
 	}
 }
