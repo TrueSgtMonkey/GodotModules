@@ -5,3 +5,11 @@ def can_build(env, platform):
 
 def configure(env):
     pass
+    
+def get_doc_path():
+    return "docs"
+
+def get_doc_classes():
+    return [
+        "AI",
+    ]
