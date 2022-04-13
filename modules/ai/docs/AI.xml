@@ -8,27 +8,63 @@
     </description>
     <methods>
         <method name="checkForPlayer">
-			<argument index="0" name="sprite" type="Sprite3D">
+            <argument index="0" name="sprite" type="Object">
             </argument>
-			<argument index="1" name="result" type="Dictionary">
+            <argument index="1" name="result" type="Dictionary">
             </argument>
-            <argument index="2" name="dir_timer" type="AniTimer">
+            <argument index="2" name="direction_timer" type="Object">
             </argument>
-            <argument index="3" name="ani_timer" type="AniTimer">
+            <argument index="3" name="animation_timer" type="Object">
             </argument>
             <description>
+                [b]Args[/b]: 
+                sprite : [u]Sprite3D[/u] -> need to pass in to rotate the AI correctly for Sprites.
+                result : [u]Dictionary[/u] -> needs to be the result of a rayShot().
+                direction_timer : [u]AniTimer[/u] -> the time it takes for the AI to turn around while idle.
+                animation_timer : [u]AniTimer[/u] -> needed for the frame information for SpriteRotater::idleTurn() function.
+                [b]Description[/b]:
                 First, checks if the dir_timer passed in exists and its time is up (it is frameReady based on the AniTimer class). If that is true, then moves the AI in one of 8 directions (which is why the ani_timer is needed), before checking if the result passed in is good and if startIdle is false. If the enemy is not set to startIdle and the result is good, then the AI will search for a target. If the result collided with the target, then this function will return true. Otherwise, this function returns false if none of these requirements are met.
+                [b]Usage[/b]:
+                [codeblock]
+                # just a simple example
+                var target : Spatial 
+                var dir_timer := AniTimer.new()
+                var ani_timer := AniTimer.new()
+
+                func _ready():
+                    target = get_target() #will retrieve the target such as a player
+                    dir_timer.wait_time = 1.0
+                    ani_timer.wait_time = 0.1 #10 fps
+                    add_child(dir_timer)
+                    add_child(ani_timer)
+
+                func _physics_process(delta):
+                    var result = rayShot(global_transform.origin, target.global_transform.origin, [self])
+
+                    # other code...
+
+                    # target not found if false
+                    if checkForPlayer($SomeSprite, result, dir_timer, ani_timer):
+                        chase_target()
+                        
+                func get_target():
+                    return Globals.target_ref # from singleton
+                    
+                func chase_target():
+                    print("Chasing target")
+                    #other chase code...
+                [/codeblock]
             </description>
         </method>
         <method name="rayShot">
             <argument index="0" name="vec1" type="Vector3">
             </argument>
-			<argument index="1" name="vec2" type="Vector3">
+            <argument index="1" name="vec2" type="Vector3">
             </argument>
-			<argument index="2" name="vecExclude" type="Array">
+            <argument index="2" name="vecExclude" type="Array">
             </argument>
             <description>
-				Checks the space_state of the world and then shoots a ray from vec1 to vec2. If the ray collides with anything between those two places, then a dictionary will return with:
+                Checks the space_state of the world and then shoots a ray from vec1 to vec2. If the ray collides with anything between those two places, then a dictionary will return with:
                 "position" - The Vector3 position in which there was an intersection.
                 "normal" - The Vector3 of the normal (the "bounce" between the ray and the surface).
                 "collider_id" - The colliding body's unique RID.
@@ -38,14 +74,14 @@
                 If there is no collision, then the function returns an empty dictionary. Will be seen as null by Godot I believe.
             </description>
         </method>
-		<method name="setHorizontalVelocity">
+        <method name="setHorizontalVelocity">
             <argument index="0" name="vel" type="Vector3">
             </argument>
             <description>
-				Sets the x and z axes of the velocity property of this class.
+                Sets the x and z axes of the velocity property of this class.
             </description>
         </method>
-		<method name="followScentTrail">
+        <method name="followScentTrail">
             <argument index="0" name="vec3s" type="Array">
             </argument>
             <description>
