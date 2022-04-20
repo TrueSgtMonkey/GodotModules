@@ -14,7 +14,7 @@ AniTimer::AniTimer()
 void AniTimer::animation(Object* p_sprite, int stFrame, int maxFrame)
 {
 	Sprite3D* sprite = Object::cast_to<Sprite3D>(p_sprite);
-	if (sprite != NULL)
+	if (sprite != NULL && stFrame >= 0 && maxFrame >= 0)
 	{
 		if (stFrame < maxFrame)
 		{
@@ -75,7 +75,6 @@ void AniTimer::prepareAnimation(Object* p_sprite, int frame)
 	lastFrame = frameNum;
 	sprite->set_frame(frame);
 	frameNum = frame;
-
 }
 
 void AniTimer::stTime()

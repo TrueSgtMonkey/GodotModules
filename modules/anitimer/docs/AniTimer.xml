@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<class name="AniTimer" category="Modules">
+    <brief_description>
+        A timer that also hosts functions to animate Isometric Animations as well as Normal Animations.
+    </brief_description>
+    <description>
+        Inherits the Timer class (so, it contains all of its functions), and also contains functions that aid with animations. Automatically hooks up a function with the "timeout" signal that sets a boolean to true when the timer is first started (using the stTime() function).
+    </description>
+    <methods>
+        <method name="animation">
+            <argument index="0" name="sprite" type="Object">
+            </argument>
+            <argument index="1" name="stFrame" type="int">
+            </argument>
+            <argument index="2" name="maxFrame" type="int">
+            </argument>
+            <description>
+                [b]Args[/b]: 
+                sprite : [u]Sprite3D[/u] -> the Sprite3D object to be moved forward by one frame.
+                stFrame : [u]int[/u] -> the first frame of the animation to play - must be greater than 0.
+                maxFrame : [u]int[/u] -> the last frame of the aniamtion to play - must be greater than 0.
+                [b]Description[/b]:
+                Moves the animation forward (add 1 to frame) or backward (subtract 1 from frame) by 1 frame. If stFrame > maxFrame, then the animation will play backwards, or will subtract 1 frame at a time. Otherwise, it will move the animation forward by 1. If the frameNum (contained within the class) surpasses maxFrame (<= if backwards or >= if forwards), then the frameNum will be set to stFrame again. The internal class' frameNum will never surpass the sprite's max frames. After all the calculation is done, then the sprite will be updated with the new frame.
+                [b]Usage[/b]:
+                [codeblock]
+                extends Spatial
+
+                const MAX_FRAME = 72
+
+                var ani := AniTimer.new()
+
+                var sprite_ref : Sprite3D
+
+                func _ready():
+                    ani.wait_time = 0.1
+                    add_child(ani)
+                    sprite_ref = $Sprite3D
+                    
+                func _process(delta):
+                    # if ani.frameReady is true, then we are ready to play the next frame
+                    if ani.frameReady:
+                        # starting the time will set ani.frameReady to false
+                        ani.stTime()
+                        # plays the next frame of the animation normally
+                        # MAX_FRAME =/= sprite_ref.hframes * sprite_ref.vframes
+                        ani.animation(sprite_ref, 0, MAX_FRAME)
+                        
+                        # this would play it backwards instead
+                        # ani.animation(sprite_ref, MAX_FRAME, 0)
+                [/codeblock]
+            </description>
+        </method>
+        <method name="isoAnimation">
+            <argument index="0" name="sprite" type="Object">
+            </argument>
+            <argument index="1" name="angle" type="int">
+            </argument>
+            <argument index="2" name="stAngle" type="int">
+            </argument>
+            <description>
+                [b]Args[/b]: 
+                sprite : [u]Sprite3D[/u] -> the Sprite3D object to be moved forward by one frame.
+                angle : [u]int[/u] -> the current direction (0 = east, 1 = northeast, 2 = north, 3 = northwest, 4 = west, 5 = southwest, 6 = south, 7 = southeast) the sprite is facing.
+                stAngle : [u]int[/u] -> the start row of the animation - use this to pick different parts of the animation
+                [b]Description[/b]:
+                Plays an animation from up to 8 different angles at once based on the angle (0-7) passed in. The stAngle determines which row to start from within the animation. Uses the animation() function to move the frame forward by 1. 
+                [b]Usage[/b]:
+                [codeblock]
+                #TODO: put code block here
+                [/codeblock]
+            </description>
+        </method>
+        <method name="prepareAnimation">
+            <argument index="0" name="sprite" type="Object">
+            </argument>
+            <argument index="1" name="frame" type="int">
+            </argument>
+            <description>
+                Sets the lastFrame variable to the current frameNum, and then updates the frameNum to the frame param passed in. Also updates the Sprite3D passed in.
+            </description>
+        </method>
+        <method name="stTime">
+            <description>
+                If the node is inside the tree, then it sets the frameReady variable to false and then starts the timer. Example shown in the "animation()" function above.
+            </description>
+        </method>
+        <method name="timerDone">
+            <description>
+                Sets frameReady to true. Connected to Timer's timeout function. Connect it to different signals if you want them to trigger the frameReady variable instead.
+            </description>
+        </method>
+        <method name="getLastFrame">
+            <description>
+                Returns the last frame before prepareAnimation() was called.
+            </description>
+        </method>
+    </methods>
+    <members>
+        <member name="frameReady" type="bool" setter="setFrameReady" getter="getFrameReady" brief="">
+            Determines if the next frame of the animation is ready to play.
+        </member>
+        <member name="frameNum" type="int" setter="setFrameNumber" getter="getFrameNumber" brief="">
+            The current frame of the animation.
+        </member>
+    </members>
+    <constants>
+    </constants>
+</class>
