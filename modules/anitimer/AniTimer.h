@@ -6,35 +6,35 @@
 
 class AniTimer : public Timer
 {
-  GDCLASS(AniTimer, Timer);
+	GDCLASS(AniTimer, Timer);
 
-  //private variables
-  bool frameReady;
-  int frameNum;
-  int lastFrame;
+	//private variables
+	bool frameReady;
+	int frameNum;
+	int lastFrame;
 
-  //private functions
+	//private functions
     int max(int x, int y);
-  int min(int x, int y);
-  
-  protected:
-    static void _bind_methods();
-    void _notification(int p_what);
-    
-  public:
-    AniTimer();
-    void animation(Object* p_sprite, int stFrame, int maxFrame);
-    void isoAnimation(Object* p_sprite, int angle, int stAngle = 0);
-    void prepareAnimation(Object* p_sprite, int frame);
-    void stTime();
-    void timerDone();
-    int getLastFrame();
+	int min(int x, int y);
+	
+	protected:
+		static void _bind_methods();
+		void _notification(int p_what);
+		
+	public:
+		AniTimer();
+		void animation(Object* p_sprite, int stFrame, int maxFrame);
+		void isoAnimation(Object* p_sprite, int angle, int stAngle = 0);
+		void prepareAnimation(Object* p_sprite, int frame);
+		void stTime();
+		void timerDone();
+		int getLastFrame();
 
-    //getters and setters
-    void setFrameReady(bool ready);
-    bool getFrameReady();
-    void setFrameNumber(int frameNumber);
-    int getFrameNumber();
+		//getters and setters
+		void setFrameReady(bool ready);
+		bool getFrameReady();
+		void setFrameNumber(int frameNumber);
+		int getFrameNumber();
 };
 
 #endif //ANI_TIMER_CLASS_H
