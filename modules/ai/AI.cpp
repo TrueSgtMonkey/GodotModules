@@ -20,14 +20,18 @@ AI::AI()
 	scentGroup = "Scent";
 }
 
+//used for passing a 3D Sprite and rotating it accordingly when in idle state
 bool AI::checkForPlayer(Object* p_sprite, const Dictionary& result, Object* p_dir_timer, Object* p_ani_timer)
 {
+	// only check for player periodically according to dir_timer
 	AniTimer* dirtimer = Object::cast_to<AniTimer>(p_dir_timer);
 	if(dirtimer != NULL && dirtimer->getFrameReady())
 	{
+		// anitimer only used for the current frame number
 		AniTimer* anitimer = Object::cast_to<AniTimer>(p_ani_timer);
 		if(anitimer != NULL)
 		{
+			// get a random direction and select the correct frame
 			dirtimer->stTime();
 			int framer = Math::rand() % 8;
 			Vector3 turnMove = rotater.idleTurn(p_sprite, framer, row, anitimer->getFrameNumber());
@@ -38,24 +42,62 @@ bool AI::checkForPlayer(Object* p_sprite, const Dictionary& result, Object* p_di
 				oldVelocity.z = turnMove.z;
 			}
 			idleMove(turnMove);
-			//if startIdle starts off as true, then enemy will not check for the player
-			if (!startIdle && result.size() > 0)
-			{
-				Spatial* spatial = Object::cast_to<Spatial>(result["collider"]);
-				if (spatial != NULL && spatial->is_in_group(playerGroup))
-				{
-					Vector3 AP = spatial->get_global_transform().origin - get_global_transform().origin;
-					if (playerInRange(AP))
-					{
-						float dotAP = playerDot(AP);
-						return dotAP > 0;
-					}
-				}
-			}
+			return lookForPlayer(result);
 		}
-		
 	}
 	
+	return false;
+}
+
+// checks for player and moves around randomly when in idle state
+bool AI::checkForPlayer3D(const Dictionary& result, Object* p_dir_timer)
+{
+	// only check for player periodically according to dir_timer
+	AniTimer* dirtimer = Object::cast_to<AniTimer>(p_dir_timer);
+	if (dirtimer != NULL && dirtimer->getFrameReady())
+	{
+		dirtimer->stTime();
+
+		//need to create a random direction here since we are not using SpriteRotater
+		Vector3 randVec;
+		randVec.x = (real_t)((rand() % 3) - 1);
+		randVec.y = 0.0f; //only capturing horizontal
+		randVec.z = (real_t)((rand() % 3) - 1);
+
+		if (Math::abs(randVec.x) > 0.0 || Math::abs(randVec.z) > 0.0)
+		{
+			oldVelocity.x = randVec.x;
+			oldVelocity.y = randVec.y;
+			oldVelocity.z = randVec.z;
+		}
+
+		idleMove(randVec);
+		return lookForPlayer(result);
+	}
+
+	return false;
+}
+
+// only spots player if player is in front of the enemy
+// this is what should trigger the enemy into a chase state
+bool AI::lookForPlayer(const Dictionary& result)
+{
+	// if startIdle starts off as true, then enemy will not check for the player
+	if (!startIdle && result.size() > 0)
+	{
+		Spatial* spatial = Object::cast_to<Spatial>(result["collider"]);
+		if (spatial != NULL && spatial->is_in_group(playerGroup))
+		{
+			// getting the distance and then perform dot product (AP needed for both)
+			Vector3 AP = spatial->get_global_transform().origin - get_global_transform().origin;
+			if (playerInRange(AP))
+			{
+				float dotAP = playerDot(AP);
+				return dotAP > 0;
+			}
+		}
+	}
+
 	return false;
 }
 
@@ -218,13 +260,15 @@ void AI::_notification(int p_what)
 
 void AI::_bind_methods()
 {
-    //AI METHODS
+  //AI METHODS
+	ClassDB::bind_method(D_METHOD("checkForPlayer3D", "result", "direction_timer"), &AI::checkForPlayer3D);
 	ClassDB::bind_method(D_METHOD("checkForPlayer", "sprite", "result", "direction_timer", "animation_timer"), &AI::checkForPlayer);
 	ClassDB::bind_method(D_METHOD("followScentTrail", "vec3s"), &AI::followScentTrail);
-    ClassDB::bind_method(D_METHOD("rayShot", "vec1", "vec2", "vecExclude"), &AI::rayShot, DEFVAL(Array()));
-    ClassDB::bind_method(D_METHOD("setHorizontalVelocity", "vel"), &AI::setHorizontalVelocity);
+	ClassDB::bind_method(D_METHOD("lookForPlayer", "result"), &AI::lookForPlayer);
+  ClassDB::bind_method(D_METHOD("rayShot", "vec1", "vec2", "vecExclude"), &AI::rayShot, DEFVAL(Array()));
+  ClassDB::bind_method(D_METHOD("setHorizontalVelocity", "vel"), &AI::setHorizontalVelocity);
     
-    ClassDB::bind_method(D_METHOD("setRow", "row"), &AI::setRow);
+  ClassDB::bind_method(D_METHOD("setRow", "row"), &AI::setRow);
 	ClassDB::bind_method(D_METHOD("getRow"), &AI::getRow);
 	ClassDB::bind_method(D_METHOD("setRandDistribution", "rd"), &AI::setRandDistribution);
 	ClassDB::bind_method(D_METHOD("getRandDistribution"), &AI::getRandDistribution);
@@ -240,7 +284,7 @@ void AI::_bind_methods()
 	ClassDB::bind_method(D_METHOD("getSightDist"), &AI::getSightDist);
 	ClassDB::bind_method(D_METHOD("setPlayerGroup", "group"), &AI::setPlayerGroup);
 	ClassDB::bind_method(D_METHOD("getPlayerGroup"), &AI::getPlayerGroup);
-    ClassDB::bind_method(D_METHOD("setScentGroup", "group"), &AI::setScentGroup);
+  ClassDB::bind_method(D_METHOD("setScentGroup", "group"), &AI::setScentGroup);
 	ClassDB::bind_method(D_METHOD("getScentGroup"), &AI::getScentGroup);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "row"), "setRow", "getRow");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "velocity"), "setVelocity", "getVelocity");

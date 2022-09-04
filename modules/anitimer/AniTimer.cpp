@@ -9,6 +9,7 @@ AniTimer::AniTimer()
 	frameReady = true;
 	frameNum = 0;
 	lastFrame = 0;
+	startFrame = 0;
 }
 
 void AniTimer::animation(Object* p_sprite, int stFrame, int maxFrame)
@@ -69,12 +70,20 @@ void AniTimer::isoAnimation(Object* p_sprite, int angle, int stAngle)
 	
 }
 
-void AniTimer::prepareAnimation(Object* p_sprite, int frame)
+void AniTimer::prepareAni(Object* p_sprite)
 {
 	Sprite3D* sprite = Object::cast_to<Sprite3D>(p_sprite);
 	lastFrame = frameNum;
-	sprite->set_frame(frame);
-	frameNum = frame;
+	sprite->set_frame(startFrame);
+	frameNum = startFrame;
+}
+
+void AniTimer::prepareAniCustomFrame(Object* p_sprite, int startFrame)
+{
+	Sprite3D* sprite = Object::cast_to<Sprite3D>(p_sprite);
+	lastFrame = frameNum;
+	sprite->set_frame(startFrame);
+	frameNum = startFrame;
 }
 
 void AniTimer::stTime()
@@ -111,6 +120,16 @@ int AniTimer::getFrameNumber()
 	return frameNum;
 }
 
+void AniTimer::setStartFrame(int startFrame)
+{
+	this->startFrame = startFrame;
+}
+
+int AniTimer::getStartFrame()
+{
+	return startFrame;
+}
+
 int AniTimer::getLastFrame()
 {
 	return lastFrame;
@@ -130,7 +149,8 @@ void AniTimer::_bind_methods()
 	//AniTimer functions
 	ClassDB::bind_method(D_METHOD("animation", "p_sprite", "stFrame", "maxFrame"), &AniTimer::animation);
 	ClassDB::bind_method(D_METHOD("isoAnimation", "p_sprite", "angle", "stAngle"), &AniTimer::isoAnimation, DEFVAL(0));
-	ClassDB::bind_method(D_METHOD("prepareAnimation", "p_sprite", "frame"), &AniTimer::prepareAnimation);
+	ClassDB::bind_method(D_METHOD("prepareAni", "p_sprite"), &AniTimer::prepareAni);
+	ClassDB::bind_method(D_METHOD("prepareAniCustomFrame", "p_sprite", "startFrame"), &AniTimer::prepareAniCustomFrame);
 	ClassDB::bind_method(D_METHOD("timerDone"), &AniTimer::timerDone);
 	ClassDB::bind_method(D_METHOD("stTime"), &AniTimer::stTime);
 	ClassDB::bind_method(D_METHOD("getLastFrame"), &AniTimer::getLastFrame);
@@ -140,8 +160,11 @@ void AniTimer::_bind_methods()
 	ClassDB::bind_method(D_METHOD("getFrameReady"), &AniTimer::getFrameReady);
 	ClassDB::bind_method(D_METHOD("setFrameNumber", "frameNumber"), &AniTimer::setFrameNumber);
 	ClassDB::bind_method(D_METHOD("getFrameNumber"), &AniTimer::getFrameNumber);
+	ClassDB::bind_method(D_METHOD("setStartFrame", "startFrame"), &AniTimer::setStartFrame);
+	ClassDB::bind_method(D_METHOD("getStartFrame"), &AniTimer::getStartFrame);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "frameReady", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameReady", "getFrameReady");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "frameNum", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameNumber", "getFrameNumber");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "startFrame", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setStartFrame", "getStartFrame");
 }
 
 /* PRIVATE METHODS */

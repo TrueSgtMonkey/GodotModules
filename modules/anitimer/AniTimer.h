@@ -12,6 +12,7 @@ class AniTimer : public Timer
 	bool frameReady;
 	int frameNum;
 	int lastFrame;
+	int startFrame;
 
 	//private functions
     int max(int x, int y);
@@ -25,7 +26,8 @@ class AniTimer : public Timer
 		AniTimer();
 		void animation(Object* p_sprite, int stFrame, int maxFrame);
 		void isoAnimation(Object* p_sprite, int angle, int stAngle = 0);
-		void prepareAnimation(Object* p_sprite, int frame);
+		void prepareAni(Object* p_sprite);
+		void prepareAniCustomFrame(Object* p_sprite, int startFrame);
 		void stTime();
 		void timerDone();
 		int getLastFrame();
@@ -35,6 +37,8 @@ class AniTimer : public Timer
 		bool getFrameReady();
 		void setFrameNumber(int frameNumber);
 		int getFrameNumber();
+		void setStartFrame(int startFrame);
+		int getStartFrame();
 };
 
 #endif //ANI_TIMER_CLASS_H
