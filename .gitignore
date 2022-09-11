@@ -1,2 +1,5 @@
 #ignore objs because they are everywhere
 *.obj
+*.o
+*.a
+*.pyc

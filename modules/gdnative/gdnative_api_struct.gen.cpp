@@ -112,10 +112,35 @@ const godot_gdnative_api_struct *gdnative_extensions_pointers[] = {
 	(godot_gdnative_api_struct *)&api_extension_net_struct,
 };
 
+extern const godot_gdnative_core_1_3_api_struct api_1_3 = {
+	GDNATIVE_CORE,
+	{1, 3},
+	NULL,
+	godot_dictionary_merge,
+	godot_pool_byte_array_has,
+	godot_pool_byte_array_sort,
+	godot_pool_int_array_has,
+	godot_pool_int_array_sort,
+	godot_pool_real_array_has,
+	godot_pool_real_array_sort,
+	godot_pool_string_array_has,
+	godot_pool_string_array_join,
+	godot_pool_string_array_sort,
+	godot_pool_vector2_array_has,
+	godot_pool_vector2_array_sort,
+	godot_pool_vector3_array_has,
+	godot_pool_vector3_array_sort,
+	godot_pool_color_array_has,
+	godot_pool_color_array_sort,
+	godot_string_join,
+	godot_string_num_uint64,
+	godot_string_num_uint64_capitalized,
+};
+
 extern const godot_gdnative_core_1_2_api_struct api_1_2 = {
 	GDNATIVE_CORE,
 	{1, 2},
-	NULL,
+	(const godot_gdnative_api_struct *)& api_1_3,
 	godot_dictionary_duplicate,
 	godot_vector3_move_toward,
 	godot_vector2_move_toward,

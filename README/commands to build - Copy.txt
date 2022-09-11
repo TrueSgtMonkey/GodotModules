@@ -1,0 +1,4 @@
+#Run cmd from Windows Explorer in Source folder
+
+#Enter this command into the command prompt
+C:\Users\codyt\AppData\Roaming\Python\Python38\Scripts\scons vsproj=yes target=release_debug use_lto=yes

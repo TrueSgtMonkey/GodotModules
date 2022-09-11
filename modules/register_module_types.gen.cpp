@@ -32,12 +32,12 @@
 #include "modules/minimp3/register_types.h"
 #include "modules/mobile_vr/register_types.h"
 #include "modules/mono/register_types.h"
+#include "modules/navigation/register_types.h"
 #include "modules/ogg/register_types.h"
 #include "modules/opensimplex/register_types.h"
 #include "modules/opus/register_types.h"
 #include "modules/pvr/register_types.h"
 #include "modules/raycast/register_types.h"
-#include "modules/recast/register_types.h"
 #include "modules/regex/register_types.h"
 #include "modules/spriteRotater/register_types.h"
 #include "modules/squish/register_types.h"
@@ -143,6 +143,9 @@ void register_module_types() {
 #ifdef MODULE_MONO_ENABLED
 	register_mono_types();
 #endif
+#ifdef MODULE_NAVIGATION_ENABLED
+	register_navigation_types();
+#endif
 #ifdef MODULE_OGG_ENABLED
 	register_ogg_types();
 #endif
@@ -157,9 +160,6 @@ void register_module_types() {
 #endif
 #ifdef MODULE_RAYCAST_ENABLED
 	register_raycast_types();
-#endif
-#ifdef MODULE_RECAST_ENABLED
-	register_recast_types();
 #endif
 #ifdef MODULE_REGEX_ENABLED
 	register_regex_types();
@@ -303,6 +303,9 @@ void unregister_module_types() {
 #ifdef MODULE_MONO_ENABLED
 	unregister_mono_types();
 #endif
+#ifdef MODULE_NAVIGATION_ENABLED
+	unregister_navigation_types();
+#endif
 #ifdef MODULE_OGG_ENABLED
 	unregister_ogg_types();
 #endif
@@ -317,9 +320,6 @@ void unregister_module_types() {
 #endif
 #ifdef MODULE_RAYCAST_ENABLED
 	unregister_raycast_types();
-#endif
-#ifdef MODULE_RECAST_ENABLED
-	unregister_recast_types();
 #endif
 #ifdef MODULE_REGEX_ENABLED
 	unregister_regex_types();
