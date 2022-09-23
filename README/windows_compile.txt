@@ -1,0 +1,22 @@
+#Run cmd from Windows Explorer in Source folder
+
+#Enter this command into the command prompt
+scons vsproj=yes target=release_debug use_lto=yes
+
+# Quick build
+scons vsproj=yes target=release_debug
+
+#linux
+scons platform=x11 tools=no target=release bits=64
+
+scons platform=windows vsproj=yes tools=no target=release use_lto=yes
+scons platform=windows vsproj=yes tools=no target=release_debug use_lto=yes
+
+# RELEASE BUILDS - takes a while
+scons platform=windows tools=no target=release_debug bits=32
+scons platform=windows tools=no target=release bits=32
+scons platform=windows tools=no target=release_debug bits=64
+scons platform=windows tools=no target=release bits=64
+
+# target compilations
+scons vsproj=yes target=release_debug use_lto=yes

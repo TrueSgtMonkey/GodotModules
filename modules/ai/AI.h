@@ -14,19 +14,17 @@ class AI : public KinematicBody
 
 	//private variables
 	SpriteRotater rotater;
-	Array id_target;
-	Array target_signal;
-	Array dictChanges;
 	int row;
 	int spriteAngle;
 	int rd;
 	int rc;
 	float sightDist;
 	float yRotation;
+	float speed;
 	bool startIdle;
 	bool walking;
 	String playerGroup;
-    String scentGroup;
+  String scentGroup;
 	Vector3 velocity;
 	Vector3 oldVelocity;
 
@@ -46,7 +44,7 @@ class AI : public KinematicBody
 		bool lookForPlayer(const Dictionary& result);
 		Dictionary rayShot(const Vector3& vec1, const Vector3& vec2, const Vector<RID>& vecExclude = Vector<RID>());
 		void setHorizontalVelocity(const Vector3& vel);
-        Dictionary followScentTrail(const Array& vec3s);
+    Dictionary followScentTrail(const Array& vec3s);
 
 		//getters and setters
 		void setVelocity(const Vector3& vec);
@@ -65,19 +63,14 @@ class AI : public KinematicBody
 		bool getWalking();
 		void setSightDist(float sightDist);
 		float getSightDist();
+		void setSpeed(float speed);
+		float getSpeed();
 		void setPlayerGroup(String group);
 		String getPlayerGroup();
-        void setScentGroup(String group);
+    void setScentGroup(String group);
 		String getScentGroup();
-		SpriteRotater* getRotater();
 		float getYRotation();
 		void setYRotation(float yRotation);
-		void setIdTarget(const Array& id_target);
-		Array getIdTarget();
-		void setTargetSignal(const Array& target_signal);
-		Array getTargetSignal();
-		void setDictChanges(const Array& dictChanges);
-		Array getDictChanges();
 };
 
 #endif //AI_CLASS_H

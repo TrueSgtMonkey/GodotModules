@@ -1,5 +1,14 @@
 #include "sprite_rotater.h"
 
+SpriteRotater::SpriteRotater()
+{
+	angles[0] = 22.5;
+	angles[1] = 67.5;
+	angles[2] = 90;
+	ang = 0.0;
+	frame = 0;
+};
+
 /* A class that rotates sprites when there is a camera rotating constantly */
 
 /* Just in case we need to do some trig stuff */

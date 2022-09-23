@@ -13,10 +13,9 @@ class AniTimer : public Timer
 	int frameNum;
 	int lastFrame;
 	int startFrame;
-	Dictionary stateStartFrame;
 
 	//private functions
-    int max(int x, int y);
+  int max(int x, int y);
 	int min(int x, int y);
 	
 	protected:
@@ -32,6 +31,7 @@ class AniTimer : public Timer
 		void stTime();
 		void timerDone();
 		int getLastFrame();
+		int getAbsoluteFrame(int rowWidth);
 
 		//getters and setters
 		void setFrameReady(bool ready);
@@ -40,8 +40,6 @@ class AniTimer : public Timer
 		int getFrameNumber();
 		void setStartFrame(int startFrame);
 		int getStartFrame();
-		void setStateStartFrame(const Dictionary& stateStartFrame);
-		Dictionary getStateStartFrame();
 };
 
 #endif //ANI_TIMER_CLASS_H

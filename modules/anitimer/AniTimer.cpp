@@ -100,6 +100,11 @@ void AniTimer::timerDone()
 	frameReady = true;
 }
 
+int AniTimer::getAbsoluteFrame(int rowWidth)
+{
+	return (frameNum % rowWidth);
+}
+
 void AniTimer::setFrameReady(bool ready)
 {
 	frameReady = ready;
@@ -135,16 +140,6 @@ int AniTimer::getLastFrame()
 	return lastFrame;
 }
 
-void AniTimer::setStateStartFrame(const Dictionary& stateStartFrame)
-{
-	this->stateStartFrame = stateStartFrame;
-}
-
-Dictionary AniTimer::getStateStartFrame()
-{
-	return this->stateStartFrame;
-}
-
 /* PROTECTED METHODS */
 void AniTimer::_notification(int p_what) 
 {
@@ -164,6 +159,7 @@ void AniTimer::_bind_methods()
 	ClassDB::bind_method(D_METHOD("timerDone"), &AniTimer::timerDone);
 	ClassDB::bind_method(D_METHOD("stTime"), &AniTimer::stTime);
 	ClassDB::bind_method(D_METHOD("getLastFrame"), &AniTimer::getLastFrame);
+	ClassDB::bind_method(D_METHOD("getAbsoluteFrame", "rowWidth"), &AniTimer::getAbsoluteFrame);
 
 	//properties
 	ClassDB::bind_method(D_METHOD("setFrameReady", "ready"), &AniTimer::setFrameReady);
@@ -172,12 +168,9 @@ void AniTimer::_bind_methods()
 	ClassDB::bind_method(D_METHOD("getFrameNumber"), &AniTimer::getFrameNumber);
 	ClassDB::bind_method(D_METHOD("setStartFrame", "startFrame"), &AniTimer::setStartFrame);
 	ClassDB::bind_method(D_METHOD("getStartFrame"), &AniTimer::getStartFrame);
-	ClassDB::bind_method(D_METHOD("setStateStartFrame", "stateStartFrame"), &AniTimer::setStateStartFrame);
-	ClassDB::bind_method(D_METHOD("getStateStartFrame"), &AniTimer::getStateStartFrame);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "frameReady", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameReady", "getFrameReady");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "frameNum", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameNumber", "getFrameNumber");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "startFrame", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setStartFrame", "getStartFrame");
-	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "stateStartFrame", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setStateStartFrame", "getStateStartFrame");
 }
 
 /* PRIVATE METHODS */
