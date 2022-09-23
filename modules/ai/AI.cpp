@@ -186,10 +186,35 @@ void AI::setPlayerGroup(String group) { playerGroup = group; }
 String AI::getPlayerGroup() { return playerGroup; }
 void AI::setScentGroup(String group) { scentGroup = group; }
 String AI::getScentGroup() { return scentGroup; }
+SpriteRotater* AI::getRotater() { return &this->rotater; }
 float AI::getYRotation() { return yRotation; }
 void AI::setYRotation(float yRotation) { this->yRotation = yRotation; }
 void AI::setSpriteAngle(int spriteAngle) { this->spriteAngle = spriteAngle; }
 int AI::getSpriteAngle() { return spriteAngle; }
+
+void AI::setIdTarget(const Array& id_target)
+{
+	this->id_target.~Array();
+	this->id_target = id_target;
+}
+
+Array AI::getIdTarget() { return id_target; }
+
+void AI::setTargetSignal(const Array& target_signal)
+{
+	this->target_signal.~Array();
+	this->target_signal = target_signal;
+}
+
+Array AI::getTargetSignal() { return target_signal; }
+
+void AI::setDictChanges(const Array& dictChanges)
+{
+	this->dictChanges.~Array();
+	this->dictChanges = dictChanges;
+}
+
+Array AI::getDictChanges() { return dictChanges; }
 
 /* PROTECTED METHODS */
 void AI::_notification(int p_what) 
@@ -207,11 +232,11 @@ void AI::_bind_methods()
 	ClassDB::bind_method(D_METHOD("checkForPlayer", "sprite", "result", "direction_timer", "animation_timer"), &AI::checkForPlayer);
 	ClassDB::bind_method(D_METHOD("followScentTrail", "vec3s"), &AI::followScentTrail);
 	ClassDB::bind_method(D_METHOD("lookForPlayer", "result"), &AI::lookForPlayer);
-  ClassDB::bind_method(D_METHOD("rayShot", "vec1", "vec2", "vecExclude"), &AI::rayShot, DEFVAL(Array()));
-  ClassDB::bind_method(D_METHOD("setHorizontalVelocity", "vel"), &AI::setHorizontalVelocity);
+    ClassDB::bind_method(D_METHOD("rayShot", "vec1", "vec2", "vecExclude"), &AI::rayShot, DEFVAL(Array()));
+    ClassDB::bind_method(D_METHOD("setHorizontalVelocity", "vel"), &AI::setHorizontalVelocity);
     
 	// Getters and Setters
-  ClassDB::bind_method(D_METHOD("setRow", "row"), &AI::setRow);
+    ClassDB::bind_method(D_METHOD("setRow", "row"), &AI::setRow);
 	ClassDB::bind_method(D_METHOD("getRow"), &AI::getRow);
 	ClassDB::bind_method(D_METHOD("setSpriteAngle", "spriteAngle"), &AI::setSpriteAngle);
 	ClassDB::bind_method(D_METHOD("getSpriteAngle"), &AI::getSpriteAngle);
@@ -231,12 +256,22 @@ void AI::_bind_methods()
 	ClassDB::bind_method(D_METHOD("getSpeed"), &AI::getSpeed);
 	ClassDB::bind_method(D_METHOD("setPlayerGroup", "group"), &AI::setPlayerGroup);
 	ClassDB::bind_method(D_METHOD("getPlayerGroup"), &AI::getPlayerGroup);
-  ClassDB::bind_method(D_METHOD("setScentGroup", "group"), &AI::setScentGroup);
+    ClassDB::bind_method(D_METHOD("setScentGroup", "group"), &AI::setScentGroup);
 	ClassDB::bind_method(D_METHOD("getScentGroup"), &AI::getScentGroup);
 	ClassDB::bind_method(D_METHOD("setYRotation", "yRotation"), &AI::setYRotation);
 	ClassDB::bind_method(D_METHOD("getYRotation"), &AI::getYRotation);
+	ClassDB::bind_method(D_METHOD("setIdTarget", "id_target"), &AI::setIdTarget);
+	ClassDB::bind_method(D_METHOD("getIdTarget"), &AI::getIdTarget);
+	ClassDB::bind_method(D_METHOD("setDictChanges", "dictChanges"), &AI::setDictChanges);
+	ClassDB::bind_method(D_METHOD("getDictChanges"), &AI::getDictChanges);
+	ClassDB::bind_method(D_METHOD("setTargetSignal", "target_signal"), &AI::setTargetSignal);
+	ClassDB::bind_method(D_METHOD("getTargetSignal"), &AI::getTargetSignal);
+	ClassDB::bind_method(D_METHOD("getRotater"), &AI::getRotater);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "row"), "setRow", "getRow");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "spriteAngle"), "setSpriteAngle", "getSpriteAngle");
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "id_target"), "setIdTarget", "getIdTarget");
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "target_signal"), "setTargetSignal", "getTargetSignal");
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "dictChanges"), "setDictChanges", "getDictChanges");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "velocity"), "setVelocity", "getVelocity");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "rd"), "setRandDistribution", "getRandDistribution");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "rc"), "setRandChance", "getRandChance");

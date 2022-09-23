@@ -140,6 +140,16 @@ int AniTimer::getLastFrame()
 	return lastFrame;
 }
 
+void AniTimer::setStateStartFrame(const Dictionary& stateStartFrame)
+{
+	this->stateStartFrame = stateStartFrame;
+}
+
+Dictionary AniTimer::getStateStartFrame()
+{
+	return this->stateStartFrame;
+}
+
 /* PROTECTED METHODS */
 void AniTimer::_notification(int p_what) 
 {
@@ -168,9 +178,12 @@ void AniTimer::_bind_methods()
 	ClassDB::bind_method(D_METHOD("getFrameNumber"), &AniTimer::getFrameNumber);
 	ClassDB::bind_method(D_METHOD("setStartFrame", "startFrame"), &AniTimer::setStartFrame);
 	ClassDB::bind_method(D_METHOD("getStartFrame"), &AniTimer::getStartFrame);
+	ClassDB::bind_method(D_METHOD("setStateStartFrame", "stateStartFrame"), &AniTimer::setStateStartFrame);
+	ClassDB::bind_method(D_METHOD("getStateStartFrame"), &AniTimer::getStateStartFrame);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "frameReady", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameReady", "getFrameReady");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "frameNum", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setFrameNumber", "getFrameNumber");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "startFrame", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setStartFrame", "getStartFrame");
+	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "stateStartFrame", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_EDITOR), "setStateStartFrame", "getStateStartFrame");
 }
 
 /* PRIVATE METHODS */

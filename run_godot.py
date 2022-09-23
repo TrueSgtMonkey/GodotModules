@@ -1,5 +1,6 @@
 from cProfile import run
 import os
+<<<<<<< HEAD
 import platform
 
 def main():
@@ -9,6 +10,12 @@ def main():
         runSequence = getRunSequence("README/windows_compile.txt")
     else:
         runSequence = getRunSequence("README/compile.txt")
+=======
+
+def main():
+    os.chdir("godot-3.5-stable")
+    runSequence = getRunSequence("README/compile.txt")
+>>>>>>> e6de187 (added speed to AI and state to AniTimer)
     os.system(runSequence)
 
 def getRunSequence(filepath):
